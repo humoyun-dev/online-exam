@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Result</title>
+</head>
+<body>
+    <h1>{{ exam.exam_name }} Result</h1>
+    <p>Score: {{ result.score }}</p>
+    
+    <h2>Student Answers:</h2>
+    {% for answer in student_answers %}
+        <p>{{ answer.question.question_text }}</p>
+        <ul>
+            {% for option in answer.question.option_set.all %}
+                {% if answer.selected_option == option %}
+                    <li {% if answer.is_correct %}style="color: green;"{% else %}style="color: red;"{% endif %}>
+                        {{ option.option_text }} {% if answer.is_correct %}(Correct){% else %}(Incorrect){% endif %}
+                    </li>
+                {% else %}
+                    <li>{{ option.option_text }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>

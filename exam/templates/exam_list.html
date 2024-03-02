@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Exams</title>
+  </head>
+  <body>
+    <h1>Exams</h1>
+    <ul>
+      {% for exam in exams %}
+      <li>
+        <a href="{% url 'take_exam' exam.id %}">{{ exam.exam_name }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

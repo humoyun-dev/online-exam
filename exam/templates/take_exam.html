@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Take Exam</title>
+</head>
+<body>
+    <h1>{{ exam.exam_name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for question in questions %}
+            <h2>{{ question.question_text }}</h2>
+            <ul>
+                {% for option in question.option_set.all %}
+                    <li>
+                        <label>
+                            <input type="radio" name="question_{{ question.id }}" value="{{ option.id }}">
+                            {{ option.option_text }}
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

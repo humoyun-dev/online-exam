@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ question.question_text }}</title>
+</head>
+<body>
+    <h1>{{ question.question_text }}</h1>
+    <p>{{ question.content }}</p>
+    <h2>Options</h2>
+    <ul>
+        {% for option in question.option_set.all %}
+            <li>{{ option.option_text }}{% if option.is_correct %} (Correct){% endif %}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
