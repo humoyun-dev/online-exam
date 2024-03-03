@@ -9,17 +9,37 @@
 </header>
 
 <main class="p-6">
-  <div class="container mx-auto max-w-3xl">
+  <div class="container mx-auto max-w-4xl">
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold mb-2">Exam Information</h2>
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200">
+          <span class="text-gray-600 font-semibold">Course:</span> <span class="text-gray-900">{{ exam.course }}</span>
+        </div>
+        <div class="px-4 py-3 border-b border-gray-200">
+          <span class="text-gray-600 font-semibold">Total Marks:</span> <span class="text-gray-900">{{ exam.total_marks }}</span>
+        </div>
+        <div class="px-4 py-3">
+          <span class="text-gray-600 font-semibold">Total Questions:</span> <span class="text-gray-900">{{ questions_count }}</span>
+        </div>
+      </div>
+    </div>
+    
     <table class="min-w-full">
       <thead>
         <tr>
+          <th
+            class="px-6 py-3 w-20 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            #
+          </th>
           <th
             class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
             Question
           </th>
           <th
-            class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider relative"
+            class="px-6 py-3 w-36 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider relative"
           >
             Mark
             <a
@@ -32,21 +52,18 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        {% for exam in exams %}
+        {% for data in questions %}
         <tr class="cursor-pointer">
           <td class="px-6 py-4 whitespace-nowrap">
             <a
               href="{% url 'exam_detail' exam.pk %}"
               class="hover:underline underline-offset-2"
             >
-              {{ exam.exam_name }}
+              {{ forloop.counter }}
             </a>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ exam.course }}</td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ exam.total_marks }}</td>
-          <td class="px-6 py-4 whitespace-nowrap relative">
-            {{ exam.total_question_number }}
-          </td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ data.question_text }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ data.mark }}</td>
         </tr>
         {% endfor %}
       </tbody>

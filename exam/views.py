@@ -97,4 +97,6 @@ def add_exam(request):
 def exam_detail(request, exam_id):
     exam = get_object_or_404(Exam, pk=exam_id)
     questions = exam.question_set.all() 
-    return render(request, 'teacher/exams/exam_detail.html', {'exam': exam , 'questions': questions})
+
+    questions_count = questions.count()
+    return render(request, 'teacher/exams/exam_detail.html', {'exam': exam , 'questions': questions, 'questions_count': questions_count})
