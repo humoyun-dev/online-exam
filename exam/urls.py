@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:exam_id>/', exam_detail, name='exam_detail'),
     path('<int:exam_id>/take/', take_exam, name='take_exam'),
     path('<int:exam_id>/result/', show_result, name='show_result'),
+    path("show_staff/<int:course_id>/", show_exams_staff, name='staff_exam_list'),
 ]

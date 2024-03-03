@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'staff/base.html' %}
+
+{% block content %}
+    {% if courses %}
+
+    <ul>
+    {% for course in courses %}
+		<li><a href="{% url 'staff_exam_list'  course.id %}">{{ course.course_name }}</a></li>
+	{% endfor %}
+
+    </ul>
+    Number of courses: {{ courses_count }}
+    {% else %}
+        <h1> Course Not Found </h1>
+    {% endif %}
+
+{% endblock %}

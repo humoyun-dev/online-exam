@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Exam, Question, Option, Result, Answer
+from .models import Exam, Question, Option, Result, Answer, Course
 from .forms import ExamForm , OptionForm
 from django.http import HttpResponseNotFound
 
@@ -9,14 +9,26 @@ from django.http import HttpResponseNotFound
 def exam_list(request):
     exams = Exam.objects.all()
     exam_count = exams.count()
+    courses = Course.objects.all()
+    courses_count = courses.count()
 
     if request.user.is_authenticated:
         if request.user.is_teacher:
             return render(request, 'teacher/exams/exam_list.html', {'exams': exams, 'exam_count': exam_count})
         elif request.user.is_student:
-            return render(request, 'student/exams/exam_list.html', {'exams': exams, 'exam_count': exam_count})
-    
-    return render(request, 'staff/exams/exam_list.html', {'exams': exams, 'exam_count': exam_count})
+            return render(request, 'student/exams/course_detail_exam_list.html', {'exams': exams, 'exam_count': exam_count})
+        elif request.user.is_staff:
+            return render(request, 'staff/exams/course_list.html', {'courses': courses, 'courses_count': courses_count})
+
+
+
+def show_exams_staff(request, course_id):
+    if request.user.is_authenticated and request.user.is_staff:
+        course = get_object_or_404(Course, id=course_id)
+        exams = Exam.objects.filter(course=course)
+        exam_count = exams.count()
+        return render(request, 'staff/exams/course_detail_exam_list.html', {"course": course, 'exams': exams, 'exam_count': exam_count})
+
 
 def take_exam(request, exam_id):
     exam = get_object_or_404(Exam, pk=exam_id)

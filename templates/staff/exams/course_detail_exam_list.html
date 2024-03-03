@@ -1,8 +1,14 @@
 {% extends 'staff/base.html' %}
 
 {% block content %}
+    {% if exams %}
+
     {% for exam in exams %}
         <a href="#">{{ exam.exam_name }}</a>
     {% endfor %}
-
+        <button><a href="#">Add exam</a></button>
+    {% else %}
+        <h1>Exam Not Found</h1>
+        <a href="#">Add exam</a>
+    {% endif %}
 {% endblock %}
