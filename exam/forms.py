@@ -1,5 +1,6 @@
 from django import forms
-from .models import Option, Exam
+from .models import *
+from django.forms import inlineformset_factory
 
 
 class OptionForm(forms.Form):
@@ -21,3 +22,13 @@ class ExamForm(forms.ModelForm):
         widgets = {
             'course': forms.Select(attrs={'class': 'form-control'}),
         }
+
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['question_text', 'content', 'mark']
+
+OptionFormSet = forms.inlineformset_factory(
+    Question, Option, fields=('option_text', 'is_correct'), extra=4, can_delete=False
+)

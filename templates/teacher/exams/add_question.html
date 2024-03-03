@@ -1,0 +1,28 @@
+{% extends 'teacher/base.html' %} {% load crispy_forms_tags %} {% block content %}
+<header class="bg-gray-800 text-white py-4 px-6">
+  <div class="max-w-3xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-semibold">Exams Detail :: {{exam.exam_name}}</h1>
+    <a
+      href="{% url 'exam_detail' exam.pk %}"
+      class="text-gray-300 hover:text-gray-100"
+    >
+      Back to Exam
+    </a>
+  </div>
+</header>
+
+<main class="my-12">
+  <div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+    <form class="p-6" method="post">
+      {% csrf_token %} {{ question_form | crispy }} {{option_formset.management_form}} {% for form in option_formset.forms %} {{ form | crispy }} {% endfor %}
+      <button
+        type="submit"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Add Exam
+      </button>
+    </form>
+  </div>
+</main>
+
+{% endblock content %}

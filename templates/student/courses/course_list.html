@@ -1,10 +1,10 @@
-{% extends 'teacher/base.html' %} {% block content %}
+{% extends 'student/base.html' %} {% block content %}
 <header class="bg-gray-800 text-white py-4 px-6">
   <div class="max-w-3xl mx-auto flex justify-between items-center">
-    <h1 class="text-2xl font-semibold">Exams</h1>
+    <h1 class="text-2xl font-semibold">Courses</h1>
     <p class="text-lg font-semibold text-white">
-      Total number of exam:
-      <span class="text-blue-500">{{ exam_count }}</span>
+      Total number of Courses:
+      <span class="text-blue-500">{{ courses | length }}</span>
     </p>
   </div>
 </header>
@@ -22,37 +22,21 @@
           <th
             class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
-            Exam Name
-          </th>
-          <th
-            class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
             Course
           </th>
           <th
             class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
-            Total Marks
-          </th>
-          <th
-            class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider relative"
-          >
-            Total Questions
-            <a
-              href="{% url 'add_exam' %}"
-              class="absolute right-3 text-2xl top-1.5 hover:text-green-600 cursor-pointer transition"
-            >
-              <i class="bi bi-plus-circle-dotted"></i>
-            </a>
+            Exams count
           </th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        {% for exam in exams %}
+        {% for data in courses %}
         <tr class="hover:bg-green-50 cursor-pointer transition">
           <td class="px-6 py-4 whitespace-nowrap">
             <a
-              href="{% url 'exam_detail' exam.pk %}"
+              
               class="hover:underline underline-offset-2"
             >
               {{ forloop.counter }}
@@ -60,33 +44,22 @@
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <a
-              href="{% url 'exam_detail' exam.pk %}"
               class="hover:underline underline-offset-2"
             >
-              {{ exam.exam_name }}
+              {{ data.course_name }}
             </a>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <a
-              href="{% url 'exam_detail' exam.pk %}"
+              
               class="hover:underline underline-offset-2"
             >
-              {{ exam.course }}
+              {{ data.exam_count }}
             </a>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ exam.total_marks }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ data.total_marks }}</td>
           <td class="px-6 py-4 whitespace-nowrap relative flex items-center">
-            {{ exam.total_question_number }}
-            <form
-              class="absolute text-red-600 right-3 text-xl"
-              action="{% url 'delete_exam' exam.pk %}"
-              method="post"
-            >
-              {% csrf_token %}
-              <button type="submit">
-                <i class="bi bi-trash3-fill"></i>
-              </button>
-            </form>
+            {{ data.question_count }}
           </td>
         </tr>
         {% endfor %}

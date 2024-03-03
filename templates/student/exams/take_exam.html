@@ -1,0 +1,66 @@
+{% extends 'student/base.html' %} {% load crispy_forms_tags %} {% block content %}
+<header class="bg-gray-800 text-white py-4 px-6">
+  <div class="max-w-3xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-semibold">{{ exam.exam_name }}</h1>
+    <p class="text-lg font-semibold text-white">
+      Total number of Questions:
+      <span class="text-blue-500">{{ exam.total_question_number }}</span>
+    </p>
+  </div>
+</header>
+
+<main class="p-6">
+  <div class="container mx-auto">
+    <form method="post" class="bg-white p-4 border shadow-md rounded">
+      <div id="timer" class="text-xl font-semibold mb-4 text-center"></div>
+      {% csrf_token %} {% for question in questions %}
+      <h2>{{ forloop.counter }}: {{ question.question_text }} ({{ question.mark }})</h2>
+      <ol type="A" style="list-style-type: upper-latin;">
+        {% for option in question.option_set.all %}
+        <li>
+          <label>
+            <input
+              type="radio"
+              name="question_{{ question.id }}"
+              value="{{ option.id }}"
+              class="form-check-input"
+            />
+            {{ option.option_text }}
+          </label>
+        </li>
+        {% endfor %}
+      </ol>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary mt-3">Submit Exam</button>
+    </form>
+  </div>
+</main>
+
+<script>
+  // Retrieve time remaining from the server
+  var timeRemaining = {{ time_remaining }};
+  
+  // Display and update the timer every second
+  var timerInterval = setInterval(function() {
+      var hours = Math.floor(timeRemaining / 3600);
+      var minutes = Math.floor((timeRemaining % 3600) / 60);
+      var seconds = Math.floor(timeRemaining % 60);
+      
+      // Format the timer
+      var timerElement = document.getElementById("timer");
+      timerElement.innerHTML = "Time remaining: " + hours + "h " + minutes + "m " + seconds + "s";
+      
+      // Decrease time remaining
+      timeRemaining--;
+
+      // Check if time is up
+      if (timeRemaining < 0) {
+          clearInterval(timerInterval); // Stop the timer
+          document.getElementById("timer").innerHTML = "Time's up!";
+          // Optionally, submit the form automatically when time's up
+          document.querySelector("form").submit();
+      }
+  }, 1000);
+</script>
+
+{% endblock %}

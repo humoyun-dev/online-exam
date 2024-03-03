@@ -1,0 +1,40 @@
+{% extends 'student/base.html' %} {% block content %}
+
+<header class="bg-gray-800 text-white py-4 px-6">
+  <div class="max-w-3xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-semibold">{{ result.exam.exam_name }}</h1>
+    <p class="text-lg font-semibold text-white">
+      Total number of Questions:
+      <span class="text-blue-500">{{ result.exam.total_question_number }}</span>
+    </p>
+    <p class="text-lg font-semibold text-white">
+        Score: <span class="text-blue-500">{{result.score}}</span>
+    </p>
+  </div>
+</header>
+
+<main class="p-6">
+  <div class="container mx-auto">
+    <div class="bg-white p-5 rounded shadow-md">
+      {% for answer in student_answers %}
+      <p class="text-3xl">{{forloop.counter}}. {{ answer.question.question_text }} ({{answer.question.mark}})</p>
+      <ol class="text-lg" style="list-style-type: upper-latin;">
+        {% for option in answer.question.option_set.all %} {% if answer.selected_option == option %}
+        <li
+          {% if answer.is_correct %}
+            style="color: green;"
+          {% else %} 
+            style="color: red;"
+          {% endif %}
+        >
+          {{ option.option_text }} {% if answer.is_correct %}(Correct){% else %}(Incorrect){% endif %}
+        </li>
+        {% else %}
+        <li>{{ option.option_text }}</li>
+        {% endif %} {% endfor %}
+      </ol>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock content %}

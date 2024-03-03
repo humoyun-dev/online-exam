@@ -12,19 +12,22 @@
   <div class="container mx-auto max-w-4xl">
     <div class="mb-6">
       <h2 class="text-lg font-semibold mb-2">Exam Information</h2>
-      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <div class="bg-white overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-200">
-          <span class="text-gray-600 font-semibold">Course:</span> <span class="text-gray-900">{{ exam.course }}</span>
+          <span class="text-gray-600 font-semibold">Course:</span>
+          <span class="text-gray-900">{{ exam.course }}</span>
         </div>
         <div class="px-4 py-3 border-b border-gray-200">
-          <span class="text-gray-600 font-semibold">Total Marks:</span> <span class="text-gray-900">{{ exam.total_marks }}</span>
+          <span class="text-gray-600 font-semibold">Total Marks:</span>
+          <span class="text-gray-900">{{ exam.total_marks }}</span>
         </div>
         <div class="px-4 py-3">
-          <span class="text-gray-600 font-semibold">Total Questions:</span> <span class="text-gray-900">{{ questions_count }}</span>
+          <span class="text-gray-600 font-semibold">Total Questions:</span>
+          <span class="text-gray-900">{{ questions_count }}</span>
         </div>
       </div>
     </div>
-    
+
     <table class="min-w-full">
       <thead>
         <tr>
@@ -43,7 +46,7 @@
           >
             Mark
             <a
-              href="{% url 'add_exam' %}"
+              href="{% url 'add_question' exam.pk %}"
               class="absolute right-3 text-2xl top-1.5 hover:text-green-600 cursor-pointer transition"
             >
               <i class="bi bi-plus-circle-dotted"></i>
@@ -53,17 +56,27 @@
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
         {% for data in questions %}
-        <tr class="cursor-pointer">
+        <tr class="hover:bg-green-50 cursor-pointer transition">
           <td class="px-6 py-4 whitespace-nowrap">
-            <a
-              href="{% url 'exam_detail' exam.pk %}"
-              class="hover:underline underline-offset-2"
-            >
+            <a href="{% url 'question_detail' data.pk %}">
               {{ forloop.counter }}
             </a>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ data.question_text }}</td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ data.mark }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <a href="{% url 'question_detail' data.pk %}">
+              {{ data.question_text }}
+            </a>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap flex items-center relative">
+            <a href="{% url 'question_detail' data.pk %}"> {{ data.mark }} </a>
+
+            <form class="absolute text-red-600 right-3 text-xl" action="{% url 'delete_question' data.pk %}" method="post">
+              {% csrf_token %}
+              <button type="submit">
+                <i class="bi bi-trash3-fill"></i>
+              </button>
+            </form>
+          </td>
         </tr>
         {% endfor %}
       </tbody>

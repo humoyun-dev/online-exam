@@ -1,0 +1,43 @@
+{% extends 'teacher/base.html' %} {% block content %}
+
+<header class="bg-gray-800 text-white py-4 px-6">
+  <div class="max-w-6xl mx-auto flex justify-between items-center">
+    <h1 class="text-3xl font-semibold text-white">
+      {{ question.question_text }}
+    </h1>
+    <a href="{% url 'exam_detail' exam.id %}" class="text-gray-300 hover:text-gray-100">
+      <i class="bi bi-arrow-left"></i> Back to Exam
+    </a>
+  </div>
+</header>
+
+<main class="mx-auto w-full">
+  <div class="mt-8 max-w-5xl mx-auto">
+    <div class="question-detail bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-4">
+        {{ question.question_text }}
+
+        <a href="{% url 'edit_question' question.id %}">
+          <i class="bi bi-vector-pen"></i>
+        </a>
+      </h2>
+      {% if question.content %}
+      <p class="text-gray-700">{{ question.content }}</p>
+      {% endif %}
+      <p class="text-gray-700">Mark: {{ question.mark }}</p>
+      <h3 class="text-lg font-semibold mt-6 mb-2">Options:</h3>
+      <ol type="A" style="list-style-type: upper-latin">
+        {% for option in question.option_set.all %}
+        <li class="text-gray-700">
+          {{ option.option_text }} {% if option.is_correct %}<span
+            class="text-green-500"
+            >(Correct)</span
+          >{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}

@@ -36,4 +36,4 @@ admin.site.register(Course)
 #             return '-'
 #     display_answers.short_description = 'Answers'
 
-# admin.site.register(Result, ResultAdmin)
+admin.site.register(Result)

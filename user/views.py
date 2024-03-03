@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.views import LoginView
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser
 from django.http import HttpResponseNotFound
@@ -49,3 +50,7 @@ def student_detail_view(request, pk):
             return HttpResponseNotFound('<h1>Page not found</h1>')
 
     return render(request, 'staff/students/student_detail.html', {'student': student})
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
