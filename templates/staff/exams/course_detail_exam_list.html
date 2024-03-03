@@ -1,0 +1,8 @@
+{% extends 'staff/base.html' %}
+
+{% block content %}
+    {% for exam in exams %}
+        <a href="#">{{ exam.exam_name }}</a>
+    {% endfor %}
+
+{% endblock %}
