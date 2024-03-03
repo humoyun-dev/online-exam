@@ -1,0 +1,36 @@
+{% extends 'teacher/base.html' %} 
+{% block content %}
+<header class="bg-gray-800 text-white py-4 px-6">
+  <div class="max-w-3xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-semibold">Student Details</h1>
+    <a href="{% url 'student-list' %}" class="text-gray-300 hover:text-gray-100">Back to Students</a>
+  </div>
+</header>
+
+<main class="px-6 py-8">
+  <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="px-6 py-4">
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4">Student Information</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <p class="text-sm font-medium text-gray-600">First Name</p>
+          <p class="text-lg font-semibold text-gray-900">{{ student.first_name }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-600">Last Name</p>
+          <p class="text-lg font-semibold text-gray-900">{{ student.last_name }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-600">Phone Number</p>
+          <p class="text-lg font-semibold text-gray-900">{{ student.phone_number }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-600">Parents Phone Number</p>
+          <p class="text-lg font-semibold text-gray-900">{{ student.parents_phone_number }}</p>
+        </div>
+        <!-- Add more fields as needed -->
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}

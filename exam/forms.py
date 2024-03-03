@@ -1,5 +1,6 @@
 from django import forms
-from .models import Option
+from .models import Option, Exam
+
 
 class OptionForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -12,3 +13,11 @@ class OptionForm(forms.Form):
                 widget=forms.RadioSelect,
                 label=question.question_text
             )
+
+class ExamForm(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = ['course', 'exam_name', 'total_marks', 'total_question_number']
+        widgets = {
+            'course': forms.Select(attrs={'class': 'form-control'}),
+        }

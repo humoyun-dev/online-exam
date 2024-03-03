@@ -1,18 +1,22 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Exam, Question, Option, Result, Answer
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import OptionForm
+from .models import Exam, Question, Option, Result, Answer
+from .forms import ExamForm , OptionForm
+from django.http import HttpResponseNotFound
 
+@login_required
 def exam_list(request):
     exams = Exam.objects.all()
+    exam_count = exams.count()
 
     if request.user.is_authenticated:
         if request.user.is_teacher:
-            return render(request, 'teacher/exams/exam_list.html')
+            return render(request, 'teacher/exams/exam_list.html', {'exams': exams, 'exam_count': exam_count})
         elif request.user.is_student:
-            return render(request, 'student/exams/exam_list.html')
+            return render(request, 'student/exams/exam_list.html', {'exams': exams, 'exam_count': exam_count})
     
-    return render(request, 'staff/exams/exam_list.html', {'exams': exams})
+    return render(request, 'staff/exams/exam_list.html', {'exams': exams, 'exam_count': exam_count})
 
 def take_exam(request, exam_id):
     exam = get_object_or_404(Exam, pk=exam_id)
@@ -58,3 +62,27 @@ def show_result(request, exam_id):
     
     student_answers = Answer.objects.filter(result=result)
     return render(request, 'show_result.html', {'exam': exam, 'result': result, 'student_answers': student_answers})
+
+@login_required
+def add_exam(request):
+    if request.user.is_authenticated and request.user.is_teacher:
+        if request.method == 'POST':
+            form = ExamForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('exam_list')
+        else:
+            form = ExamForm()
+        
+        return render(request, 'teacher/exams/add_exam.html', {'form': form})
+    elif request.user.is_authenticated and request.user.is_student:
+        return HttpResponseNotFound('<h1>Page not found</h1>')
+    
+    else:
+        return render(request, 'staff/exams/add_exam.html', {'form': form})
+
+@login_required
+def exam_detail(request, exam_id):
+    exam = get_object_or_404(Exam, pk=exam_id)
+    questions = exam.question_set.all() 
+    return render(request, 'teacher/exams/exam_detail.html', {'exam': exam , 'questions': questions})

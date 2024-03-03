@@ -7,6 +7,8 @@ urlpatterns = [
     # path('results/', view_results, name='view_results'),
 
     path('', exam_list, name='exam_list'),
+    path('add/', add_exam, name='add_exam'),
+    path('<int:exam_id>/', exam_detail, name='exam_detail'),
     path('<int:exam_id>/take/', take_exam, name='take_exam'),
     path('<int:exam_id>/result/', show_result, name='show_result'),
 ]

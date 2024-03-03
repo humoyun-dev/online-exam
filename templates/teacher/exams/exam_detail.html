@@ -1,38 +1,27 @@
 {% extends 'teacher/base.html' %} {% block content %}
 <header class="bg-gray-800 text-white py-4 px-6">
   <div class="max-w-3xl mx-auto flex justify-between items-center">
-    <h1 class="text-2xl font-semibold">Exams</h1>
-    <p class="text-lg font-semibold text-white">
-      Total number of exam:
-      <span class="text-blue-500">{{ exam_count }}</span>
-    </p>
+    <h1 class="text-2xl font-semibold">Exams Detail :: {{exam.exam_name}}</h1>
+    <a href="{% url 'exam_list' %}" class="text-gray-300 hover:text-gray-100">
+      Back to Exams
+    </a>
   </div>
 </header>
 
 <main class="p-6">
-  <div class="container mx-auto">
+  <div class="container mx-auto max-w-3xl">
     <table class="min-w-full">
       <thead>
         <tr>
           <th
             class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
-            Exam Name
-          </th>
-          <th
-            class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Course
-          </th>
-          <th
-            class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Total Marks
+            Question
           </th>
           <th
             class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider relative"
           >
-            Total Questions
+            Mark
             <a
               href="{% url 'add_exam' %}"
               class="absolute right-3 text-2xl top-1.5 hover:text-green-600 cursor-pointer transition"
@@ -46,7 +35,10 @@
         {% for exam in exams %}
         <tr class="cursor-pointer">
           <td class="px-6 py-4 whitespace-nowrap">
-            <a href="{% url 'exam_detail' exam.pk %}" class="hover:underline underline-offset-2">
+            <a
+              href="{% url 'exam_detail' exam.pk %}"
+              class="hover:underline underline-offset-2"
+            >
               {{ exam.exam_name }}
             </a>
           </td>
