@@ -1,8 +1,6 @@
 from django.db import models
 from user.models import CustomUser
 from django.utils import timezone
-from django.dispatch import receiver
-from django.db.models.signals import pre_save
 
 class Course(models.Model):
     course_name = models.CharField(max_length=100)
@@ -16,15 +14,13 @@ class Exam(models.Model):
     total_marks = models.PositiveIntegerField()
     total_question_number = models.PositiveIntegerField()
     duration_minutes = models.PositiveIntegerField(default=60)  # Duration of the exam in minutes
-    end_time = models.DateTimeField(null=True, blank=True)  # Time when the exam ends
 
     def __str__(self):
         return self.exam_name
-    
-    def save(self, *args, **kwargs):
-        if not self.pk:  # If the instance is being created
-            self.end_time = timezone.now() + timezone.timedelta(minutes=self.duration_minutes)
-        super().save(*args, **kwargs)
+
+    @property
+    def end_time(self):
+        return timezone.now() + timezone.timedelta(minutes=self.duration_minutes)
 
 class Question(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
@@ -62,9 +58,3 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"Answer for {self.question.question_text} by {self.student.username}"
-    
-@receiver(pre_save, sender=Exam)
-def update_exam_end_time(sender, instance, **kwargs):
-    if instance.pk:  # If the instance is being updated
-        return  # Don't update end time if already set
-    instance.end_time = timezone.now() + timezone.timedelta(minutes=instance.duration_minutes)

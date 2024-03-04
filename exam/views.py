@@ -23,6 +23,8 @@ def exam_list(request):
         elif request.user.is_staff:
             return render(request, 'staff/exams/course_list.html', {'courses': courses, 'courses_count': courses_count})
 
+
+
 @login_required
 def take_exam(request, exam_id):
     exam = get_object_or_404(Exam, pk=exam_id)
@@ -36,40 +38,69 @@ def take_exam(request, exam_id):
 
     time_remaining = (exam.end_time - current_time).total_seconds()  # Calculate time remaining in seconds
 
+    if time_remaining <= 0:
+        # Time is up, handle this case as needed
+        messages.error(request, 'Time is up for this exam!')
+        return redirect('exam_list')  # Redirect to exam list or any appropriate page
+
     if request.method == 'POST':
         form = OptionForm(request.POST, questions=questions)
+        
         if form.is_valid():
-            # Your existing code for processing the exam submission
+            # Process the form submission
             total_mark = 0
             for question in questions:
                 selected_option_id = form.cleaned_data.get(f'question_{question.id}')
-                if selected_option_id:
-                    selected_option = get_object_or_404(Option, pk=selected_option_id)
-                    total_mark += question.mark if selected_option.is_correct else 0
-            
+                selected_option = get_object_or_404(Option, pk=selected_option_id) if selected_option_id else None
+                total_mark += question.mark if (selected_option and selected_option.is_correct) else 0
+
+                # Save the answer for this question
+                Answer.objects.create(
+                    result=None,  # Set to None for now; you can update it later after creating the Result object
+                    student=request.user,
+                    question=question,
+                    selected_option=selected_option,
+                    is_correct=(selected_option is not None and selected_option.is_correct)
+                )
+
+            # Create the Result object
             result = Result.objects.create(student=request.user, exam=exam, score=total_mark)
-            for question in questions:
-                selected_option_id = form.cleaned_data.get(f'question_{question.id}')
-                if selected_option_id:
-                    selected_option = get_object_or_404(Option, pk=selected_option_id)
-                    is_correct = selected_option.is_correct
-                else:
-                    is_correct = False
-                
-                Answer.objects.create(result=result, student=request.user, question=question,
-                                       selected_option=selected_option, is_correct=is_correct)
-            
+
+            # Update the result field of the answers created earlier
+            for answer in Answer.objects.filter(result=None, student=request.user, question__exam=exam):
+                answer.result = result
+                answer.save()
+
             messages.success(request, 'Exam submitted successfully!')
             return redirect('show_result', exam_id=exam_id)
     else:
         form = OptionForm(questions=questions)
-    
+
     return render(request, 'student/exams/take_exam.html', {
         'exam': exam,
         'questions': questions,
         'form': form,
         'time_remaining': time_remaining  # Pass time remaining to the template
     })
+
+
+
+def save_student_answers(exam, questions, request):
+    # Get the currently logged-in student
+    student = request.user
+
+    # Loop through each question and save the student's selected options
+    for question in questions:
+        selected_option_id = request.POST.get(f'question_{question.id}')
+        if selected_option_id:
+            selected_option = get_object_or_404(Option, pk=selected_option_id)
+            is_correct = selected_option.is_correct
+        else:
+            selected_option = None
+            is_correct = False
+        
+        # Create an Answer object for each question
+        Answer.objects.create(student=student, exam=exam, question=question, selected_option=selected_option, is_correct=is_correct)
 
 @login_required
 def show_result(request, exam_id):
@@ -190,3 +221,14 @@ def show_courses(request):
             return render(request, 'student/courses/course_list.html', {'courses': courses})
         elif request.user.is_staff:
             return render(request, 'staff/courses/course_list.html', {'courses': courses})
+
+@login_required
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    exams = Exam.objects.filter(course=course)
+    questions = Question.objects.filter(exam__course=course)
+
+    return render(request, 'student/courses/course_detail.html', {'course': course, 'exams': exams, 'questions': questions})
+
+
+
