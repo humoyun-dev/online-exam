@@ -14,7 +14,7 @@
 <main class="p-6">
   <div class="container mx-auto">
     <form method="post" class="bg-white p-4 border shadow-md rounded" id="exam-form">
-      <div id="timer" class="text-xl font-semibold mb-4 text-center">Time Remaining: {{ time_remaining }}</div>
+      <div id="timer" class="text-xl font-semibold mb-4 text-center">Time Remaining: {{ duration_minutes }}:00</div>
       {% csrf_token %}
       {% for question in questions %}
       <h2>
@@ -41,11 +41,11 @@
   </div>
 </main>
 
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    var timeRemaining = {{ time_remaining }};
+    var durationMinutes = {{ exam.duration_minutes }};
     var timerElement = document.getElementById("timer");
+    var timeRemaining = durationMinutes * 60; // Convert minutes to seconds
 
     function updateTimer() {
       if (timeRemaining > 0) {
@@ -56,19 +56,12 @@
         timeRemaining--;
       } else {
         timerElement.innerHTML = "Time Up!";
-        // Check if any radio button is selected
-        var selectedOptions = document.querySelectorAll('input[type="radio"]:checked');
-        if (selectedOptions.length > 0) {
-          document.getElementById('exam-form').submit(); // Submit the form
-        } else {
-          alert('Please select an option for each question before submitting.'); // Alert the user to select options
-        }
+        document.getElementById('exam-form').submit(); // Submit the form when time is up
       }
     }
 
     setInterval(updateTimer, 1000); // Update timer every second
   });
 </script>
-
 
 {% endblock %}
