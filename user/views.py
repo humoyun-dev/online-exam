@@ -54,3 +54,5 @@ def student_detail_view(request, pk):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
