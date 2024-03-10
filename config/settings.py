@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'jazzmin',
-    'whitenoise'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
