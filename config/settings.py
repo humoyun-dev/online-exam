@@ -76,6 +76,8 @@ TEMPLATES = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://online-exam.up.railway.app', '*']
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
