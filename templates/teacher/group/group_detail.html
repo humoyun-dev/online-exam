@@ -1,0 +1,59 @@
+{% extends 'teacher/base.html' %} {% block content %}
+<header class="bg-gray-800 text-white py-4 px-6">
+  <div class="max-w-3xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-semibold">{{group.group_name}}</h1>
+    <a href="{% url 'group_list' %}">Back to groups</a>
+  </div>
+</header>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="bg-white shadow-md rounded-lg">
+    <div class="px-6 py-4 bg-gray-800 rounded-t-lg">
+      <h1 class="text-xl font-semibold text-white">
+        {{ group.group_name }} Details
+      </h1>
+    </div>
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800 mb-4">
+            Group Information
+          </h2>
+          <div class="flex flex-col space-y-4">
+            <div>
+              <span class="text-sm font-medium text-gray-600">Group Name:</span>
+              <span class="text-sm text-gray-800">{{ group.group_name }}</span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">Teacher:</span>
+              <span class="text-sm text-gray-800">{{ group.teacher }}</span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">Exams:</span>
+              <span class="text-sm text-gray-800">{{ group.exams }}</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800 mb-4">Students</h2>
+          <ul class="">
+            {% for student in group.student.all %}
+            <li class="cursor-pointer">
+              <a
+                class="text-gray-800"
+                href="{% url 'student_detail' student.pk %}"
+              >
+                {{ student.first_name }} {{ student.last_name }}
+              </a>
+              <span class="ml-3 text-blue-600"
+                >+998 {{student.phone_number}}</span
+              >
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

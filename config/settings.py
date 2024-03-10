@@ -128,6 +128,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -140,8 +143,14 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 
 JAZZMIN_SETTINGS = {
+    "site_title": "Inno Group",
+    "site_header": "Inno Group",
+    "site_brand": "Inno Group",
+    "site_logo": "/images/logo.png",
+    "site_logo_classes": "img-circle",
     "changeform_format": "single",
     "changeform_format_overrides": {"exam": "single"},
+    "hide_models": ['auth.group'],
 }
 
 

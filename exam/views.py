@@ -23,7 +23,6 @@ def exam_list(request):
         elif request.user.is_staff:
             return render(request, 'staff/exams/course_list.html', {'courses': courses, 'courses_count': courses_count})
 
-
 @login_required
 def take_exam(request, exam_id):
     exam = get_object_or_404(Exam, pk=exam_id)
@@ -61,7 +60,6 @@ def take_exam(request, exam_id):
         
     return render(request, 'student/exams/take_exam.html', {'exam': exam, 'questions': questions, 'form': form})
 
-
 def show_result(request, exam_id):
     exam = get_object_or_404(Exam, pk=exam_id)
     
@@ -70,7 +68,6 @@ def show_result(request, exam_id):
 
     student_answers = Answer.objects.filter(result=result)
     return render(request, 'student/exams/show_result.html', {'exam': exam, 'result': result, 'student_answers': student_answers})
-
 
 def save_student_answers(exam, questions, request):
     # Get the currently logged-in student
@@ -217,4 +214,23 @@ def course_detail(request, course_id):
 
     return render(request, 'student/courses/course_detail.html', {'course': course, 'exams': exams, 'questions': questions})
 
-
+@login_required
+def all_results(request):
+    try:
+        results = Result.objects.all()
+        if not results:
+            # Handle the case when there are no results
+            return render(request, 'teacher/results/no_results.html')
+        else:
+            return render(request, 'teacher/results/results.html', {'results': results})
+    except Result.DoesNotExist:
+        # Handle the case when no Result objects exist
+        return render(request, 'teacher/results/no_results.html')
+    
+@login_required
+def result_detail(request, result_id):
+    result = get_object_or_404(Result, pk=result_id)
+    
+    student_answers = Answer.objects.filter(result=result)
+    
+    return render(request, 'teacher/results/result_detail.html', {'result': result, 'student_answers': student_answers})

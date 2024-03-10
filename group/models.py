@@ -9,6 +9,6 @@ class Groups(models.Model):
     student = models.ManyToManyField(CustomUser, related_name='students')
 
     class Meta:
-        verbose_name_plural = "Groups of students"
+        verbose_name_plural = "Groups"
     def __str__(self):
         return self.group_name

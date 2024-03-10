@@ -1,0 +1,21 @@
+{% extends 'teacher/base.html' %}
+
+{% block content %}
+<header class="bg-gray-800 text-white py-4 px-6">
+  <div class="max-w-3xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-semibold">Results</h1>
+    <a href="{% url 'exam_list' %}" class="text-gray-300 hover:text-gray-100">
+      Back to Exams
+    </a>
+  </div>
+</header>
+
+<main class="p-6">
+  <div class="container mx-auto max-w-4xl">
+    <div class="bg-white rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4">No Results Found</h2>
+      <p class="text-gray-600">There are no results available at the moment.</p>
+    </div>
+  </div>
+</main>
+{% endblock content %}
