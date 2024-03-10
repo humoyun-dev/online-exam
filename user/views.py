@@ -24,7 +24,7 @@ def home(request):
             return render(request, 'teacher/teacher.html')
         elif request.user.is_student:
             return render(request, 'student/student.html')
-    return render(request, 'staff/staff.html')
+    return redirect("staff/")
 
 @login_required
 def student_list(request):

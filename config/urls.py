@@ -21,7 +21,7 @@ from django.urls import path, include, re_path
 from user.views import *
 
 urlpatterns = [
-    path('staff/', admin.site.urls),
+    path('staff/', admin.site.urls),    
     path('accounts/', include('user.urls')),
     path('exams/', include('exam.urls')),
     path('', home, name='home'),

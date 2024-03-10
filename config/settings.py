@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user',
+    'group',
     'exam',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -135,6 +137,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 AUTH_USER_MODEL = 'user.CustomUser'
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+
+JAZZMIN_SETTINGS = {
+    "changeform_format": "single",
+    "changeform_format_overrides": {"exam": "single"},
+}
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
